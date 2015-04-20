@@ -1,7 +1,20 @@
 /**
  * Classes in JavaScript.
- * 
+ *
+ * Функция создаёт новый класс(функцию-конструктор) по параметрам.
+ *
  * See more examples in the tests.
+ *
+ * @function
+ *
+ * @param {Object} options Настройки класса.
+ * @param {mixed} options.myProperties Одно из свойств создаваемого класса.
+ * @param {Function} options.myMethod Один из методов создаваемого класса.
+ * @param {Function} options.$constructor Конструктор создаваемого класса.
+ * @param {Function} options.$extends Родительский класс.
+ * @param {Object} options.$static Объект содержащий статические свойства класса.
+ * @param {mixed} options.$static.myStaticProperty Одно из статических свойств создаваемого класса.
+ * @returns {Function} Конструктор нового класса.
  *
  * @example
  *   var SomeClass = createClass({
@@ -59,8 +72,7 @@ var createClass = function(){
   /**
    * Создание класса
    *
-   * @param {Object} options Настройки класса
-   * @return {Function} Конструктор класса
+   * @inner
    */
   return function(options) {
     options = options || {};

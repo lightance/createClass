@@ -102,7 +102,7 @@ This is the best compromise between complexity and ease of use.
 
 ## Unit Tests
 
-Start `tests/tests.html`.
+Start `tests/tests.htm`.
 
 
 ## Questions
