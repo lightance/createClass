@@ -47,28 +47,6 @@ test('constructor', function(){
   equal(obj.myProperties, 'foobar');
 });
 
-test('static', function(){
-  var SomeClass = createClass({
-    $static: {
-      nextId: 5
-    },
-
-    id: null,
-
-    $constructor: function(){
-      this.id = this.$static.nextId++;
-    }
-  });
-
-  var obj1 = new SomeClass;
-  var obj2 = new SomeClass;
-  var obj3 = new SomeClass;
-
-  equal(obj1.id, 5);
-  equal(obj2.id, 6);
-  equal(obj3.id, 7);
-});
-
 test('inheritance', function(){
   var BaseClass = createClass();
 
@@ -126,6 +104,25 @@ test('inheritance and constructor', function(){
   });
 
   var ParentClass = createClass({
+    $extends: BaseClass
+  });
+
+  var baseObj = new BaseClass;
+  var parentObj = new ParentClass;
+
+  equal(baseObj.val, 5);
+  equal(parentObj.val, 5);
+});
+
+test('constructor overloading', function(){
+  var BaseClass = createClass({
+    val: null,
+    $constructor: function(){
+      this.val = 5;
+    }
+  });
+
+  var ParentClass = createClass({
     $extends: BaseClass,
     $constructor: function(){
       this.$parent.$constructor();
@@ -136,117 +133,6 @@ test('inheritance and constructor', function(){
   var baseObj = new BaseClass;
   var parentObj = new ParentClass;
 
-  equal(baseObj.val,   5);
+  equal(baseObj.val, 5);
   equal(parentObj.val, 6); // 5++
-});
-
-test('inheritance and static', function(){
-  var BaseClass = createClass({
-    $static: {
-      name: 'base name'
-    }
-  });
-
-  var ParentClass = createClass({
-    $extends: BaseClass,
-    $static: {
-      name: 'parent name'
-    }
-  });
-
-  var ChildClass = createClass({
-    $extends: ParentClass,
-    $static: {
-      name: 'child name'
-    },
-    getName: function(){
-      return this.$static.name;
-    },
-    getParentName: function(){
-      return this.$parent.$static.name;
-    },
-    getBaseName: function(){
-      return this.$parent.$parent.$static.name;
-    }
-  });
-
-  var obj = new ChildClass;
-
-  equal(obj.getName(),       'child name');
-  equal(obj.getParentName(), 'parent name');
-  equal(obj.getBaseName(),   'base name');
-});
-
-test('inheritance and static 2', function(){
-  var BaseClass = createClass({
-    $static: {
-      name: 'base name'
-    },
-    getName: function(){
-      return this.$static.name;
-    }
-  });
-
-  var ParentClass = createClass({
-    $extends: BaseClass,
-    $static: {
-      name: 'parent name'
-    }
-  });
-
-  var ChildClass = createClass({
-    $extends: ParentClass,
-    $static: {
-      name: 'child name'
-    },
-    getParentName: function(){
-      return this.getName.apply(this.$parent);
-    },
-    getBaseName: function(){
-      return this.getName.apply(this.$parent.$parent);
-    }
-  });
-
-  var obj = new ChildClass;
-
-  equal(obj.getName(),       'child name');
-  equal(obj.getParentName(), 'parent name');
-  equal(obj.getBaseName(),   'base name');
-});
-
-test('inheritance and static 3', function(){
-  var BaseClass = createClass({
-    $static: {
-      baseName: 'base name'
-    }
-  });
-
-  var ParentClass = createClass({
-    $extends: BaseClass,
-    $static: {
-      parentName: 'parent name'
-    }
-  });
-
-  var ChildClass = createClass({
-    $extends: ParentClass,
-    $static: {
-      childName: 'child name'
-    },
-    getChildName: function(){
-      return this.$static.childName;
-    },
-    getParentName: function(){
-      return this.$static.parentName;
-    },
-    getBaseName: function(){
-      return this.$static.baseName;
-    }
-  });
-
-  var obj = new ChildClass;
-
-  equal(obj.getChildName(),  'child name');
-  equal(obj.getParentName(), 'parent name');
-  equal(obj.getBaseName(),   'base name');
 });
